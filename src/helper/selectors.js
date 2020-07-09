@@ -9,3 +9,16 @@ export function getAppointmentsForDay(state, day) {
     })
     return results;
 }
+
+export function getInterview(state, interview){
+  if(interview){
+    const results = {
+      interviewer: state.interviewers[`${interview.interviewer}`],
+      student: interview.student
+    }
+    return results;
+  }
+  return null;
+}
+
+//comand+d
