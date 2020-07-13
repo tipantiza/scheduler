@@ -3,7 +3,8 @@ import axios from "axios";
 
 import "components/Application.scss";
 import "../components/Appointment/styles.scss";
-import { getInterviewersForDay } from "helper/selectors";
+
+import { decreaseSpotVal, increaseSpotVal} from '../helper/Helper'
 
 export default function useApplicationData(){
 
@@ -20,7 +21,8 @@ export default function useApplicationData(){
     return axios.delete(`/api/appointments/${id}`)
     .then(() => {
       state.appointments[id].interview = null;
-      setState({...state})
+      const newState = increaseSpotVal(state)
+      setState({...newState})
     })
   } 
 
@@ -35,7 +37,8 @@ export default function useApplicationData(){
     };
     return axios.put(`/api/appointments/${id}`, appointment)
     .then(() => {
-      setState({...state, appointments})
+      const newState = decreaseSpotVal(state)
+      setState({...newState, appointments})
     })
   }
   
@@ -50,8 +53,6 @@ export default function useApplicationData(){
     })
     
   }, []);
-
-
   return { state, setDay, bookInterview, cancelInterview} 
   
 }
