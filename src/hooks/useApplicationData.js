@@ -41,6 +41,21 @@ export default function useApplicationData(){
       setState({...newState, appointments})
     })
   }
+
+  function editInterview(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    return axios.put(`/api/appointments/${id}`, appointment)
+    .then(() => {
+      setState({...state, appointments})
+    })
+  }
   
   useEffect(() => {
     Promise.all([
@@ -53,6 +68,6 @@ export default function useApplicationData(){
     })
     
   }, []);
-  return { state, setDay, bookInterview, cancelInterview} 
+  return { state, setDay, bookInterview, cancelInterview, editInterview} 
   
 }
