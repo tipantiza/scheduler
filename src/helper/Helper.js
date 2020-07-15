@@ -1,16 +1,24 @@
-
-export function decreaseSpotVal (state) {
-  let dayObj = state.days.filter(dayObj => dayObj.name === state.day);
-    const spotsUpdate = dayObj[0].spots - 1;
-    const dayKey = dayObj[0].id - 1;
-    state.days[dayKey].spots = spotsUpdate;
-    return state
+function updateSpotVal(state, step) {
+  let updatedDays = state.days.map(dayObj => {
+    if(dayObj.name === state.day){
+      return {
+        ...dayObj,
+        spots: dayObj.spots + step
+      }
+    }
+    return {
+      ...dayObj
+    }
+  });
+  return {
+    ...state,
+    days: updatedDays 
+  }
 }
 
+export function decreaseSpotVal(state) {
+  return updateSpotVal(state, -1)
+}
 export function increaseSpotVal(state) {
-  let dayObj = state.days.filter(dayObj => dayObj.name === state.day);
-    const spotsUpdate = dayObj[0].spots + 1;
-    const dayKey = dayObj[0].id - 1;
-    state.days[dayKey].spots = spotsUpdate;
-    return state
+  return updateSpotVal(state, 1)
 }

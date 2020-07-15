@@ -43,10 +43,11 @@ describe('Application', () => {
 
     expect(getByText(day, "no spots remaining")).toBeInTheDocument();
   })
+
   it("loads data, cancels an interview and increases the spots remaining for Monday by 1", async() => {
     const { container, debug } = render(<Application />);
+
     await waitForElement(() => getByText( container, "Archie Cohen"));
-    
     const appointment = getAllByTestId(container, "appointment").find(appointment => queryByText(appointment, "Archie Cohen"));
     
     fireEvent.click(getByAltText(appointment, "Delete"))
@@ -59,19 +60,21 @@ describe('Application', () => {
     const day = getAllByTestId(container, "day").find(day => queryByText(day, "Monday"))
     
     // debug();
-    expect(getByText(day, "1 spot remaining")).toBeInTheDocument();
+    expect(getByText(day, "2 spots remaining")).toBeInTheDocument();
 
   })
+
   it("loads data, edits an interview and keeps the spots remaining for Monday the same", async() => {
     const { container, debug } = render(<Application />);
-    debug(container)
+
     await waitForElement(() => getByText( container, "Archie Cohen"));
+    debug(container)
     
     const appointment = getAllByTestId(container, "appointment").find(appointment => queryByText(appointment, "Archie Cohen"));
     
     fireEvent.click(getByAltText(appointment, "Edit"))
 
-    fireEvent.change(getByText(appointment, "Archie Cohen"), {
+    fireEvent.change(getByPlaceholderText(appointment, "Enter Student Name"), {
       target: { value: "Landon tipantiza" }
     });
 
@@ -86,10 +89,10 @@ describe('Application', () => {
 
     expect(getByText(day, "1 spot remaining")).toBeInTheDocument();
   })
-  it("shows the save error when failing to save an appointment", () => {
+  xit("shows the save error when failing to save an appointment", () => {
     
   })
-  it("shows the delete error when failing to delete an existing appointment", () => {
+  xit("shows the delete error when failing to delete an existing appointment", () => {
     
   })
 });

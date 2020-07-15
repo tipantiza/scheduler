@@ -16,25 +16,28 @@ export default function useApplicationData(){
   });
 
   const setDay = day => setState({ ...state, day });
-
-  const cancelInterview = (id) => {
-    return axios.delete(`/api/appointments/${id}`)
-    .then(() => {
-      state.appointments[id].interview = null;
-      const newState = increaseSpotVal(state)
-      setState({...newState})
-    })
-  } 
-
-  function bookInterview(id, interview) {
+  const updateAppointments = (id, interview, state) => {
     const appointment = {
       ...state.appointments[id],
-      interview: { ...interview }
+      interview
     };
     const appointments = {
       ...state.appointments,
       [id]: appointment
     };
+    return { appointment, appointments}
+  }
+  const cancelInterview = (id) => {
+    return axios.delete(`/api/appointments/${id}`)
+    .then(() => {
+      const { appointments } = updateAppointments(id, null, state)
+      const newState = increaseSpotVal(state)
+      setState({...newState, appointments})
+    })
+  } 
+
+  function bookInterview(id, interview) {
+    const { appointments, appointment } = updateAppointments(id, interview, state)
     return axios.put(`/api/appointments/${id}`, appointment)
     .then(() => {
       const newState = decreaseSpotVal(state)
@@ -43,14 +46,7 @@ export default function useApplicationData(){
   }
 
   function editInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
+    const { appointments, appointment } = updateAppointments(id, interview, state)
     return axios.put(`/api/appointments/${id}`, appointment)
     .then(() => {
       setState({...state, appointments})
