@@ -1,3 +1,4 @@
+//colaberated with jalayna tipantiza and hafiz
 function updateSpotVal(state, step) {
   let updatedDays = state.days.map(dayObj => {
     if(dayObj.name === state.day){
